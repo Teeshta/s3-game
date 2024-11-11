@@ -23,18 +23,37 @@ body {
     background-color: rgba(255, 255, 255, 0.95);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     border-radius: 20px;
+    text-align: center; /* Center all content in container */
 }
 
 h1 {
     font-size: 2.2em;
     color: #4a4a8f;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #4a4a8f, transparent);
 }
 
 .game-info {
     margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .instructions {
@@ -42,6 +61,10 @@ h1 {
     margin-bottom: 20px;
     color: #666;
     line-height: 1.4;
+    text-align: center;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .stats {
@@ -52,6 +75,30 @@ h1 {
     font-size: 1.1em;
     color: #4a4a8f;
     font-weight: 600;
+}
+
+.button-container {
+    text-align: center;
+    margin: 25px 0;
+}
+
+#start-game {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 35px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-block;
+    min-width: 160px;
+}
+
+#start-game:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
 .game-board {
@@ -84,24 +131,6 @@ h1 {
     object-fit: cover;
     border-radius: 8px;
     pointer-events: none;
-}
-
-#start-game {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 12px 28px;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    margin: 10px 0;
-}
-
-#start-game:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
 @keyframes match {
@@ -137,5 +166,9 @@ h1 {
     
     .container {
         padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.6em;
     }
 }
