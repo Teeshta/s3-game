@@ -1,9 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('#game-board');
     const startButton = document.getElementById('start-game');
+    const movesDisplay = document.getElementById('moves');
+    const matchesDisplay = document.getElementById('matches');
+    let moves = 0;
+    let matches = 0;
     let cardsChosen = [];
     let cardsChosenId = [];
-    let cardsWon = [];
+    let isProcessing = false;
 
     const cardArray = [
         { name: 'card1', img: 'images/distracted.png' },
@@ -15,63 +19,93 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: 'card4', img: 'images/rollsafe.png' },
         { name: 'card4', img: 'images/rollsafe.png' },
         { name: 'card5', img: 'images/success.png' },
-        { name: 'card5', img: 'images/success.png' },
-        // ...add more pairs as needed
+        { name: 'card5', img: 'images/success.png' }
     ];
 
     function shuffle(array) {
-        array.sort(() => 0.5 - Math.random());
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function updateStats() {
+        movesDisplay.textContent = `Moves: ${moves}`;
+        matchesDisplay.textContent = `Matches: ${matches}`;
     }
 
     function createBoard() {
-        shuffle(cardArray);
         grid.innerHTML = '';
-        cardsWon = [];
-
-        for (let i = 0; i < cardArray.length; i++) {
-            const card = document.createElement('img');
-            card.setAttribute('src', 'images/blank.png');
-            card.setAttribute('data-id', i);
+        shuffle(cardArray);
+        moves = 0;
+        matches = 0;
+        updateStats();
+        
+        cardArray.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            
+            const cardImage = document.createElement('img');
+            cardImage.setAttribute('src', 'images/blank.png');
+            cardImage.setAttribute('data-id', index);
+            
+            card.appendChild(cardImage);
             card.addEventListener('click', flipCard);
             grid.appendChild(card);
-        }
+        });
     }
 
     function flipCard() {
-        let cardId = this.getAttribute('data-id');
-        if (!cardsChosenId.includes(cardId)) {
+        if (isProcessing) return;
+        
+        const cardImg = this.querySelector('img');
+        const cardId = cardImg.getAttribute('data-id');
+        
+        if (!cardsChosenId.includes(cardId) && cardsChosen.length < 2) {
+            cardImg.setAttribute('src', cardArray[cardId].img);
             cardsChosen.push(cardArray[cardId].name);
             cardsChosenId.push(cardId);
-            this.setAttribute('src', cardArray[cardId].img);
+            
             if (cardsChosen.length === 2) {
-                setTimeout(checkForMatch, 500);
+                moves++;
+                updateStats();
+                isProcessing = true;
+                setTimeout(checkForMatch, 800);
             }
         }
     }
 
     function checkForMatch() {
-        const cards = document.querySelectorAll('#game-board img');
+        const cards = document.querySelectorAll('.card');
         const firstCardId = cardsChosenId[0];
         const secondCardId = cardsChosenId[1];
-
+        
         if (cardsChosen[0] === cardsChosen[1] && firstCardId !== secondCardId) {
-            cards[firstCardId].style.visibility = 'hidden';
-            cards[secondCardId].style.visibility = 'hidden';
+            cards[firstCardId].classList.add('matched');
+            cards[secondCardId].classList.add('matched');
             cards[firstCardId].removeEventListener('click', flipCard);
             cards[secondCardId].removeEventListener('click', flipCard);
-            cardsWon.push(cardsChosen);
+            matches++;
+            updateStats();
+            
+            if (matches === cardArray.length / 2) {
+                setTimeout(() => {
+                    alert(`Congratulations! You won in ${moves} moves!`);
+                }, 500);
+            }
         } else {
-            cards[firstCardId].setAttribute('src', 'images/blank.png');
-            cards[secondCardId].setAttribute('src', 'images/blank.png');
+            const firstImg = cards[firstCardId].querySelector('img');
+            const secondImg = cards[secondCardId].querySelector('img');
+            firstImg.setAttribute('src', 'images/blank.png');
+            secondImg.setAttribute('src', 'images/blank.png');
         }
-
+        
         cardsChosen = [];
         cardsChosenId = [];
-
-        if (cardsWon.length === cardArray.length / 2) {
-            alert('Congratulations! You found them all!');
-        }
+        isProcessing = false;
     }
 
     startButton.addEventListener('click', createBoard);
+    createBoard(); // Initialize the game when the page loads
 });
