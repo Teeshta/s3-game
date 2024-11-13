@@ -149,11 +149,11 @@ h1::after {
         grid-template-columns: repeat(4, 1fr);
         gap: 8px;
     }
-    
+
     h1 {
         font-size: 1.8em;
     }
-    
+
     .instructions {
         font-size: 1em;
     }
@@ -163,12 +163,54 @@ h1::after {
     .game-board {
         grid-template-columns: repeat(3, 1fr);
     }
-    
+
     .container {
         padding: 15px;
     }
-    
+
     h1 {
         font-size: 1.6em;
+    }
+}
+
+/* Style the difficulty select dropdown */
+.difficulty-container {
+    margin: 10px 0;
+    font-size: 1.2em;
+}
+
+.difficulty-container label {
+    font-size: 1.2em;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+#difficulty {
+    font-size: 1.1em;
+    padding: 8px 12px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+/* Hover and focus styles */
+#difficulty:hover,
+#difficulty:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .difficulty-container {
+        text-align: center;
+    }
+
+    #difficulty {
+        width: 100%;
+        max-width: 200px;
     }
 }
